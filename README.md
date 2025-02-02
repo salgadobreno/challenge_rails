@@ -1,3 +1,16 @@
+NOTE:
+setting up mise with ruby@3.3.1 here gave me an error so I upped project to 3.3.7
+
+LoadError: linked to incompatible /home/buzaga/.local/share/mise/installs/ruby/3.4.1/l
+ib/libruby.so.3.4 - /home/buzaga/.rvm/gems/ruby-2.7.6/gems/date-3.4.1/lib/date_core.so
+  <internal:/home/buzaga/.local/share/mise/installs/ruby/3.3.1/lib/ruby/3.3.0/rubygems
+/core_ext/kernel_require.rb>:136:in `require'
+          <internal:/home/buzaga/.local/share/mise/installs/ruby/3.3.1/lib/ruby/3.3.0/
+rubygems/core_ext/kernel_require.rb>:136:in `require'
+          /home/buzaga/.rvm/gems/ruby-2.7.6/gems/date-3.4.1/lib/date.rb:4:in `<top (re
+quired)>'
+
+
 # Desafio técnico e-commerce
 
 ## Nossas expectativas
