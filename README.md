@@ -1,3 +1,13 @@
+# SETUP
+
+docker compose run web bundle exec rake db:setup
+docker compose run test bundle exec rake db:setup
+run tests locally:
+DATABASE_URL=postgresql://postgres:password@0.0.0.0:5432/store_test bundle exec rspec spec/models/cart_spec.rb
+
+psql -U postgres -h 0.0.0.0
+docker compose run db
+
 NOTE:
 setting up mise with ruby@3.3.1 here gave me an error so I upped project to 3.3.7
 
