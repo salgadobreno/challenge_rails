@@ -35,8 +35,8 @@ RSpec.describe Cart, type: :model do
   end
 
   describe 'total_price' do
-    it 'calculates total_price correctly' do
-      cart = create(
+    let(:cart) {
+      create(
         :cart,
         cart_items: [
           build(
@@ -51,11 +51,93 @@ RSpec.describe Cart, type: :model do
           )
         ]
       )
-      
+    }
+
+    it 'calculates total_price correctly' do
       expect(cart.total_price).to eq 7.96
     end
   end
 
+  describe 'register_item' do
+    let(:cart) { create(:cart) }
+
+    it 'registers new item at the specified quantity' do
+      expect {
+        cart.register_item product: product1, quantity: 5
+      }.to change(CartItem, :count).by(1)
+      expect(cart.cart_items.last.quantity).to eq 5
+    end
+
+    it 'updates last_interaction_at' do
+      expect(cart.last_interaction_at).to eq nil
+      cart.register_item product: product1, quantity: 5
+      expect(cart.last_interaction_at).not_to be_nil
+    end
+
+    context 'item was already in cart' do
+      it 'overrides product quantity, does not duplicate cart products' do
+        expect {
+          cart.register_item product: product1, quantity: 5
+          cart.register_item product: product1, quantity: 5
+          cart.register_item product: product1, quantity: 5
+          cart.register_item product: product1, quantity: 5
+          cart.register_item product: product1, quantity: 10
+        }.to change(CartItem, :count).by(1)
+        expect(cart.cart_items.last.quantity).to eq 10
+      end
+    end
+
+    context 'quantity is 0 or less' do
+      it 'does nothing' do
+        expect {
+          cart.register_item product: product1, quantity: 0
+          cart.register_item product: product1, quantity: -1
+        }.to change(CartItem, :count).by(0)
+      end
+    end
+  end
+
+  describe 'add_item' do
+    let(:cart) { create(:cart) }
+
+    context 'product is not in cart' do
+      let!(:cart_item) { create(:cart_item, cart: cart, product: product2, quantity: 3) }
+      it 'does nothing' do
+        expect {
+          cart.reload.add_item product: product1, quantity: 3
+        }.to change(CartItem, :count).by(0)
+      end
+    end
+
+    context 'product is in cart' do
+      let!(:cart_item) { create(:cart_item, cart: cart, product: product1, quantity: 3) }
+
+      it 'sums item quantity' do
+        cart.reload.add_item product: product1, quantity: 3
+        expect(cart.cart_items.last.quantity).to eq 6
+      end
+
+      it 'updates last_interaction_at' do
+        expect(cart.last_interaction_at).to eq nil
+        cart.add_item product: product1, quantity: 5
+        expect(cart.last_interaction_at).not_to be_nil
+      end
+
+      context 'quantity is negative' do
+        it 'subtracts item quantity' do
+          cart.reload.add_item product: product1, quantity: -2
+          expect(cart.cart_items.last.quantity).to eq 1
+        end
+
+        it 'does not go less than 0' do
+          cart.reload.add_item product: product1, quantity: -20
+          expect(cart.cart_items.last.quantity).to eq 0
+        end
+      end
+
+    end
+
+  end
   describe 'serialization' do
     let(:cart) { 
       create(
