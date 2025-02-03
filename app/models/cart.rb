@@ -56,6 +56,13 @@ class Cart < ApplicationRecord
     cart_items.map { |e| e.total_price }.sum.to_f
   end
 
+  def interacted!
+    update(
+      abandoned: false,
+      last_interaction_at: Time.zone.now
+    )
+  end
+
   def serializable_hash(options = nil)
     super({
       only: [:id],
@@ -69,7 +76,4 @@ class Cart < ApplicationRecord
     cart_items
   end
 
-  def interacted!
-    update(last_interaction_at: Time.zone.now)
-  end
 end

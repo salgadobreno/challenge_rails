@@ -68,10 +68,9 @@ RSpec.describe Cart, type: :model do
       expect(cart.cart_items.last.quantity).to eq 5
     end
 
-    it 'updates last_interaction_at' do
-      expect(cart.last_interaction_at).to eq nil
+    it 'marks as interacted' do
+      expect(cart).to receive :interacted!
       cart.register_item product: product1, quantity: 5
-      expect(cart.last_interaction_at).not_to be_nil
     end
 
     context 'item was already in cart' do
@@ -118,9 +117,8 @@ RSpec.describe Cart, type: :model do
       end
 
       it 'updates last_interaction_at' do
-        expect(cart.last_interaction_at).to eq nil
+        expect(cart).to receive :interacted!
         cart.add_item product: product1, quantity: 5
-        expect(cart.last_interaction_at).not_to be_nil
       end
 
       context 'quantity is negative' do
@@ -160,6 +158,27 @@ RSpec.describe Cart, type: :model do
       expect {
         cart.remove_item(product1)
       }.to change(CartItem, :count).by(-1)
+    end
+
+    it 'updates last_interaction_at' do
+      expect(cart).to receive :interacted!
+      cart.remove_item(product1)
+    end
+  end
+
+  describe 'interacted!' do
+    let(:cart) { create(:cart) }
+
+    it 'updates last_interaction_at' do
+      expect(cart.last_interaction_at).to eq nil
+      cart.interacted!
+      expect(cart.last_interaction_at).not_to be_nil
+    end
+
+    it 'clears abandoned flag if it was set' do
+      cart.update(abandoned: true)
+      cart.interacted!
+      expect(cart.abandoned?).to be false
     end
   end
 
