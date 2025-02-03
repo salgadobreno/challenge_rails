@@ -8,7 +8,6 @@
   - [x] 2. Listar itens do carrinho atual
   - [x] 3. Alterar a quantidade de produtos no carrinho
   - [x] 4. Remover um produto do carrinho
-    - [?] Certifique-se de que o endpoint lida corretamente com casos em que o carrinho está vazio após a remoção do produto.
   - [x] 5. Excluir carrinhos abandonados
 
 - [x] O código deve ser fácil de ler. Clean Code pode te ajudar.
@@ -27,12 +26,16 @@
 # COMANDOS e anotações
 
 docker compose up
+
 docker compose run web bundle exec rake db:setup
+
 docker compose run test bundle exec rake db:setup
+
 run tests locally:
 DATABASE_URL=postgresql://postgres:password@0.0.0.0:5432/store_test bundle exec rspec spec/models/cart_spec.rb
 
 psql -U postgres -h 0.0.0.0
+
 docker compose run db
 
 NOTE:
@@ -52,7 +55,7 @@ quired)>'
 
 ## Nossas expectativas
 
-A equipe de engenharia da RD Station tem alguns princípios nos quais baseamos nosso trabalho diário. Um deles é: projete seu código para ser mais fácil de entender, não mais fácil de escrever.
+A equipe de engenharia da xxxxxx tem alguns princípios nos quais baseamos nosso trabalho diário. Um deles é: projete seu código para ser mais fácil de entender, não mais fácil de escrever.
 
 Portanto, para nós, é mais importante um código de fácil leitura do que um que utilize recursos complexos e/ou desnecessários.
 
