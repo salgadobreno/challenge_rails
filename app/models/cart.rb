@@ -1,6 +1,11 @@
 class Cart < ApplicationRecord
   has_many :cart_items
 
+  scope :abandoned, -> { where(abandoned: true) }
+  scope :not_abandoned, -> { where(abandoned: false) }
+  scope :stale, -> { not_abandoned.where('last_interaction_at < ?', 3.hours.ago) }
+  scope :dead, -> { abandoned.where('last_interaction_at < ?', 7.days.ago) }
+
   def register_item(product:, quantity:)
     return if quantity < 1
     product_item = cart_items.find_by(product:)
@@ -36,6 +41,7 @@ class Cart < ApplicationRecord
     product_item = cart_items.find_by(product: product)
     
     product_item.destroy
+    interacted!
   end
 
   def mark_as_abandoned
