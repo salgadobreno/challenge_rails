@@ -1,5 +1,32 @@
-# SETUP
+# TASKS
 
+- [x] Suite de testes original PASS
+  - [x] Implementação dos testes faltantes e de novos testes para os métodos/serviços/entidades criados
+
+- [x] Desafio
+  - [x] 1. Registrar um produto no carrinho
+  - [x] 2. Listar itens do carrinho atual
+  - [x] 3. Alterar a quantidade de produtos no carrinho
+  - [x] 4. Remover um produto do carrinho
+    - [?] Certifique-se de que o endpoint lida corretamente com casos em que o carrinho está vazio após a remoção do produto.
+  - [x] 5. Excluir carrinhos abandonados
+
+- [x] O código deve ser fácil de ler. Clean Code pode te ajudar.
+- [x] Notas gerais e informações sobre a versão da linguagem e outras informações importantes para executar seu código.
+- [x] Código que se preocupa com a performance (complexidade de algoritmo).
+- [x] O seu código deve cobrir todos os casos de uso presentes no README, mesmo que não haja um teste implementado para tal.
+- [x] A adição de novos testes
+
+- [x] Repositório público com a aplicação desenvolvida (GitHub, BitBucket, etc.).
+
+
+### Itens adicionais / Legais de ter
+- [x] Utilização de factory na construção dos testes
+- [x] Desenvolvimento do docker-compose / dockerização da app
+
+# COMANDOS e anotações
+
+docker compose up
 docker compose run web bundle exec rake db:setup
 docker compose run test bundle exec rake db:setup
 run tests locally:
@@ -149,7 +176,7 @@ Response:
 }
 ```
 
-### 3. Remover um produto do carrinho 
+### 4. Remover um produto do carrinho 
 
 Criar um endpoint para excluir um produto do do carrinho. 
 
