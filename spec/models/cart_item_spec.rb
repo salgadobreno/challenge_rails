@@ -42,4 +42,28 @@ RSpec.describe CartItem, type: :model do
       expect(cart_item.errors[:product]).to include("can't be blank")
     end
   end
+
+  describe 'total_price' do
+    it 'multiplies unit price by quantity' do
+      product = create(:product, price: 10)
+      cart_item = build(:cart_item, product:, quantity: 3)
+
+      expect(cart_item.total_price).to eq 30
+    end
+  end
+
+  describe 'serializable_hash' do
+    it 'returns the correct hash' do
+      product = create(:product, name: "Test Product", price: 10)
+      cart_item = build(:cart_item, product: product, quantity: 3)
+
+      expect(cart_item.serializable_hash).to eq({
+        id: product.id,
+        name: "Test Product",
+        quantity: 3,
+        total_price: 30,
+        unit_price: 10
+      })
+    end
+  end
 end
