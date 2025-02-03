@@ -26,6 +26,18 @@ class Cart < ApplicationRecord
     interacted!
   end
 
+  def has_product?(product)
+    product_item = cart_items.find_by(product:)
+
+    product_item.present?
+  end
+
+  def remove_item(product)
+    product_item = cart_items.find_by(product: product)
+    
+    product_item.destroy
+  end
+
   def mark_as_abandoned
     last_interaction_diff = Time.zone.now - last_interaction_at
 

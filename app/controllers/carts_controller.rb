@@ -27,6 +27,19 @@ class CartsController < ApplicationController
     render json: @cart
   end
 
+  def remove_item
+    return unless @cart
+    product = Product.find item_params.require(:product_id)
+    if @cart.has_product? product
+      @cart.remove_item(product)
+      render json: @cart
+    else
+      r = { message: "Produto não existe no carrinho" }
+      render json: r, status: :bad_request
+    end
+
+  end
+
   private 
 
   def set_cart

@@ -126,4 +126,35 @@ RSpec.describe "/cart", type: :request do
       end
     end
   end
+
+  describe "DELETE /:id" do
+    let(:cart) { Cart.create }
+
+    before do
+      allow_any_instance_of(CartsController).to receive(:session).and_return({cart_id: cart.id})
+    end
+
+    context 'when the product is in the cart' do
+      let!(:cart_item) { CartItem.create(cart: cart, product: product, quantity: 1) }
+
+      subject do
+        delete "/cart/#{product.id}", as: :json
+      end
+
+      it 'removes product from the cart' do
+        expect { subject }.to change { cart.reload.cart_items.size }.by(-1)
+      end
+    end
+
+    context 'when the product is not in the cart' do
+      subject do
+        delete "/cart/#{product.id}", as: :json
+      end
+
+      it 'replies with 400 Bad Request' do
+        subject
+        expect(response).to have_http_status :bad_request
+      end
+    end
+  end
 end

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :products
   resource :cart do
     post "add_item" => "carts#add_item"
+    delete ":product_id" => "carts#remove_item"
   end
   get "up" => "rails/health#show", as: :rails_health_check
 

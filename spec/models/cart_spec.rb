@@ -138,6 +138,31 @@ RSpec.describe Cart, type: :model do
     end
 
   end
+
+  describe 'has_product?' do
+    let(:cart) { create(:cart) }
+    let!(:cart_item) { create(:cart_item, cart: cart, product: product1, quantity: 3) }
+
+    it 'returns true if product is in cart' do
+      expect(cart.reload.has_product?(product1)).to be true
+    end
+
+    it 'returns false if product is not in cart' do
+      expect(cart.reload.has_product?(product2)).to be false
+    end
+  end
+
+  describe 'remove_item' do
+    let(:cart) { create(:cart) }
+    let!(:cart_item) { create(:cart_item, cart: cart, product: product1, quantity: 3) }
+    
+    it 'removes item from cart' do
+      expect {
+        cart.remove_item(product1)
+      }.to change(CartItem, :count).by(-1)
+    end
+  end
+
   describe 'serialization' do
     let(:cart) { 
       create(
